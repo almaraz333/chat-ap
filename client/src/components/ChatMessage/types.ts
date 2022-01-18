@@ -1,1 +1,3 @@
-export type ChatMessageProps = { message?: string };
+export type ChatMessageProps = {
+  message?: { message: string; name: string; time: string };
+};
