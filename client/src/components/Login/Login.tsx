@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LOGIN_URL = '/auth';
 
@@ -11,6 +12,8 @@ export const Login = () => {
   const [errMsg, setErrMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     userRef.current?.focus();
   }, []);
@@ -22,7 +25,7 @@ export const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log('yo');
+    navigate('chat');
 
     // try {
     //   const response = await axios.post(
@@ -65,7 +68,10 @@ export const Login = () => {
         {errMsg}
       </p>
       <h1 className="mb-3 text-3xl">Sign In</h1>
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <form
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        onSubmit={(e) => handleSubmit(e)}
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -108,7 +114,7 @@ export const Login = () => {
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="button"
+            type="submit"
           >
             Sign In
           </button>
