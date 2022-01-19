@@ -7,7 +7,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Login />} />
-        <Route path="chat" element={<Chat />} />
+        <Route path="chat/:roomId" element={<Chat />} />
 
         <Route path="*" element={<h1>Nothing here</h1>} />
       </Route>

@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const LOGIN_URL = '/auth';
-
 export const Login = () => {
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef(null);
@@ -10,7 +8,7 @@ export const Login = () => {
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [roomId, setRoomId] = useState<string | undefined>();
 
   const navigate = useNavigate();
 
@@ -25,7 +23,7 @@ export const Login = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    navigate('chat');
+    navigate(`/chat/${roomId}`);
 
     // try {
     //   const response = await axios.post(
@@ -69,7 +67,7 @@ export const Login = () => {
       </p>
       <h1 className="mb-3 text-3xl">Sign In</h1>
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="bg-white w-[50vw] shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-56"
         onSubmit={(e) => handleSubmit(e)}
       >
         <div className="mb-4">
@@ -110,7 +108,50 @@ export const Login = () => {
           <p className="text-red-500 text-xs italic">
             Please choose a password.
           </p>
+          <h1 className="text-3xl font-bold my-5 text-center">Choose a room</h1>
+          <div
+            data-testid="rooms"
+            className="bg-white flex flex-col items-center shadow-md rounded px-8 pt-6 pb-8 mb-auto mt-20"
+          >
+            <div className="flex justify-center">
+              <div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                    value="1"
+                    onChange={(e) => setRoomId(e.target.value)}
+                  />
+                  <label
+                    className="form-check-label inline-block text-gray-800"
+                    htmlFor="flexRadioDefault1"
+                  >
+                    1
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input
+                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    value="2"
+                    onChange={(e) => setRoomId(e.target.value)}
+                  />
+                  <label
+                    className="form-check-label inline-block text-gray-800"
+                    htmlFor="flexRadioDefault2"
+                  >
+                    2
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
