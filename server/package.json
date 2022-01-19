@@ -2,7 +2,7 @@
   "name": "chat_app",
   "version": "1.0.0",
   "description": "realtime chat app with rooms",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"

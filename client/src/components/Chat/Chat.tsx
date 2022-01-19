@@ -1,39 +1,43 @@
 import { ChatProps } from './types';
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
-import { ChatMessage } from '..';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
+import { useParams } from 'react-router-dom';
+
+import { ChatMessage } from '..';
+
+let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
+
+const ENDPOINT = 'http://localhost:4000';
 
 export const Chat: React.FC<ChatProps> = () => {
-  const ENDPOINT = 'http://localhost:4000';
-
+  const params = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<
-    ({ name: string; message: string; time: string } | undefined)[]
+    { name: string; message: string; time: string }[]
   >([]);
+  const [roomId, setRoomId] = useState<string | undefined>();
+  const [userName, setUserName] = useState('Colton');
+  const [roomUsers, setRoomUsers] = useState([]);
 
   const messagesRef = useRef<null | HTMLDivElement>(null);
 
-  const socket = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
-    null
-  );
-
   useEffect(() => {
-    socket.current = io(ENDPOINT);
+    socket = io(ENDPOINT);
 
-    socket.current.on('message', (data) =>
-      setMessages((prev) => [...prev, data])
-    );
+    socket.emit('join', { userName, roomId: params.roomId });
 
-    return () => {
-      socket.current?.emit('disconnect');
-
-      socket.current?.off();
-    };
+    socket.on('roomUsers', (users) => {
+      setRoomUsers(users);
+    });
   }, [ENDPOINT]);
 
+  useEffect(() => {
+    socket?.on('message', (data) => setMessages((prev) => [...prev, data]));
+  }, []);
+
   const handleMessageSend = () => {
-    socket.current?.emit('message', message);
+    socket?.emit('message', message);
     setMessage('');
     if (messagesRef.current) {
       messagesRef.current.scrollTo({
@@ -44,17 +48,26 @@ export const Chat: React.FC<ChatProps> = () => {
   };
 
   return (
-    <div data-testid="chat" className="flex flex-col">
+    <div data-testid="chat" className="flex flex-col bg-gray-100">
       <div className="flex w-screen h-screen">
         <div className="w-[15vw] h-full blue-glassmorphism"></div>
-        <div className="w-full h-full bg-gray-100 flex flex-col ">
+        <div className="w-full h-full  flex flex-col ">
+          <h1 className="text-3xl font-bold ml-auto mr-auto my-5">
+            Room {params.roomId}
+          </h1>
+
           <div
             ref={messagesRef}
             className="h-max-[100vh] h-[100vh] overflow-scroll pb-10 no-scrollbar"
           >
             {messages &&
               messages.map((msg, i) => (
-                <ChatMessage message={msg} key={`${i}-${msg}`} />
+                <ChatMessage
+                  message={msg.message}
+                  name={msg.name}
+                  time={msg.time}
+                  key={`${i}-${msg}`}
+                />
               ))}
           </div>
           <div className="w-8/12 flex items-center justify-around mt-auto mb-5 bg-gray-200 py-4 mx-auto rounded-lg shadow-lg">

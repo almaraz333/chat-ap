@@ -1,3 +1,5 @@
 export type ChatMessageProps = {
-  message?: { message: string; name: string; time: string };
+  message: string;
+  name: string;
+  time: string;
 };
