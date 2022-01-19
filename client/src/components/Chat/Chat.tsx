@@ -1,4 +1,4 @@
-import { ChatProps } from './types';
+import { ChatProps, Message, User } from './types';
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
@@ -13,12 +13,10 @@ const ENDPOINT = 'http://localhost:4000';
 export const Chat: React.FC<ChatProps> = () => {
   const params = useParams();
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState<
-    { name: string; message: string; time: string }[]
-  >([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [roomId, setRoomId] = useState<string | undefined>();
   const [userName, setUserName] = useState('Colton');
-  const [roomUsers, setRoomUsers] = useState([]);
+  const [roomUsers, setRoomUsers] = useState<User[]>([]);
 
   const messagesRef = useRef<null | HTMLDivElement>(null);
 
@@ -50,7 +48,14 @@ export const Chat: React.FC<ChatProps> = () => {
   return (
     <div data-testid="chat" className="flex flex-col bg-gray-100">
       <div className="flex w-screen h-screen">
-        <div className="w-[15vw] h-full blue-glassmorphism"></div>
+        <div className="w-[15vw] h-full blue-glassmorphism">
+          <h2 className="text-2xl font-bold underline ml-2 mt-2">Users</h2>
+          <ul className="ml-2 mt-2">
+            {roomUsers.map((user) => (
+              <li>{user.userName}</li>
+            ))}
+          </ul>
+        </div>
         <div className="w-full h-full  flex flex-col ">
           <h1 className="text-3xl font-bold ml-auto mr-auto my-5">
             Room {params.roomId}
