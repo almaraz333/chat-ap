@@ -1,3 +1,5 @@
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../atoms';
 import { ChatMessageProps } from './types';
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -5,7 +7,8 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   name,
   time
 }) => {
-  const isSentByCurrentUser = name === 'Colton';
+  const userInfo = useRecoilValue(userInfoState);
+  const isSentByCurrentUser = name === userInfo?.name;
   return (
     <div
       data-testid="chat-message"

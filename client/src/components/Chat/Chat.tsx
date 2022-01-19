@@ -5,17 +5,20 @@ import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { useParams } from 'react-router-dom';
 
 import { ChatMessage } from '..';
+import { useRecoilValue } from 'recoil';
+import { userInfoState } from '../../atoms';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
 
 const ENDPOINT = 'http://localhost:4000';
 
 export const Chat: React.FC<ChatProps> = () => {
+  const userInfo = useRecoilValue(userInfoState);
+
   const params = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [roomId, setRoomId] = useState<string | undefined>();
-  const [userName, setUserName] = useState('Colton');
+  const [userName, setUserName] = useState(userInfo?.name);
   const [roomUsers, setRoomUsers] = useState<User[]>([]);
 
   const messagesRef = useRef<null | HTMLDivElement>(null);
@@ -52,12 +55,12 @@ export const Chat: React.FC<ChatProps> = () => {
           <h2 className="text-2xl font-bold underline ml-2 mt-2">Users</h2>
           <ul className="ml-2 mt-2">
             {roomUsers.map((user) => (
-              <li>{user.userName}</li>
+              <li key={user.id}>{user.userName}</li>
             ))}
           </ul>
         </div>
         <div className="w-full h-full  flex flex-col ">
-          <h1 className="text-3xl font-bold ml-auto mr-auto my-5">
+          <h1 className="text-4xl font-bold ml-auto mr-auto my-5">
             Room {params.roomId}
           </h1>
 
