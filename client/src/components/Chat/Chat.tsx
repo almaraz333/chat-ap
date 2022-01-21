@@ -10,7 +10,7 @@ import { userInfoState } from '../../atoms';
 
 let socket: Socket<DefaultEventsMap, DefaultEventsMap> | null;
 
-const ENDPOINT = 'http://localhost:4000';
+const ENDPOINT = 'https://react-chat-web-socket-app.herokuapp.com/';
 
 export const Chat: React.FC<ChatProps> = () => {
   const userInfo = useRecoilValue(userInfoState);
