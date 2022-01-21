@@ -3,6 +3,7 @@ import { Chat, Login, RequireAuth, Rooms } from './components';
 import { Layout } from './Layout';
 
 import { initializeApp } from 'firebase/app';
+import { Register } from './components/Register';
 
 initializeApp({
   apiKey: 'AIzaSyDsejbhvfWPJs1RHf-VrC9NHq7y2AzYj8s',
@@ -23,6 +24,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
         <Route element={<RequireAuth />}>
           <Route path="chat/:roomId" element={<Chat />} />

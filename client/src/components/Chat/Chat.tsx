@@ -55,7 +55,9 @@ export const Chat: React.FC<ChatProps> = () => {
           <h2 className="text-2xl font-bold underline ml-2 mt-2">Users</h2>
           <ul className="ml-2 mt-2">
             {roomUsers.map((user) => (
-              <li key={user.id}>{user.userName}</li>
+              <li className="text-white" key={user.id}>
+                {user.userName}
+              </li>
             ))}
           </ul>
         </div>

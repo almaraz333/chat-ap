@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+import { userAuthTokenState } from '../../atoms';
 import { RoomsProps } from './types';
 
 export const Rooms: React.FC<RoomsProps> = () => {
-  const [roomId, setRoomId] = useState<string | undefined>();
+  const [roomId, setRoomId] = useState<string | null>(null);
+
+  const setUserAuthToken = useSetRecoilState(userAuthTokenState);
 
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/chat/${roomId}`);
+    if (roomId) navigate(`/chat/${roomId}`);
+  };
+
+  const handleLogout = () => {
+    setUserAuthToken(null);
+    navigate(`//`);
   };
 
   return (
@@ -16,7 +25,7 @@ export const Rooms: React.FC<RoomsProps> = () => {
       <h1 className="text-3xl font-bold my-5 text-center">Choose a room</h1>
       <div
         data-testid="rooms"
-        className="bg-white flex flex-col items-center shadow-md rounded px-8 pt-6 pb-8 mb-auto mt-10"
+        className="bg-white flex flex-col justify-center shadow-md rounded px-8 pt-6 pb-3 mb-auto mt-5"
       >
         <div className="flex justify-center">
           <div>
@@ -54,13 +63,23 @@ export const Rooms: React.FC<RoomsProps> = () => {
             </div>
           </div>
         </div>
-        <button
-          className="ml-auto mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          type="button"
-          onClick={handleClick}
-        >
-          Enter Room
-        </button>
+        <div className="flex justify-between items-center">
+          <button
+            className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onClick={handleLogout}
+          >
+            Log Out
+          </button>
+          <button
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:bg-blue-200"
+            type="button"
+            disabled={!roomId}
+            onClick={handleClick}
+          >
+            Enter Room
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -8,7 +8,9 @@ import {
 import { useSetRecoilState } from 'recoil';
 import { userAuthTokenState, userInfoState } from '../../atoms';
 
-export const Login = () => {
+import { RegisterProps } from './types';
+
+export const Register: React.FC<RegisterProps> = () => {
   const userRef = useRef<HTMLInputElement | null>(null);
   const errRef = useRef(null);
 
@@ -36,13 +38,9 @@ export const Login = () => {
     try {
       const authentication = getAuth();
 
-      const data = await signInWithEmailAndPassword(authentication, user, pwd);
+      await createUserWithEmailAndPassword(authentication, user, pwd);
 
-      setUserAuthToken(data.user.refreshToken);
-
-      setUserInfo({ name: userName });
-
-      navigate(`/rooms`);
+      navigate(`/`);
     } catch (err) {
       throw new Error('Authentication failed');
     }
@@ -57,7 +55,7 @@ export const Login = () => {
       >
         {errMsg}
       </p>
-      <h1 className="text-5xl">Sign In</h1>
+      <h1 className="text-5xl">Register</h1>
       <form
         className="bg-white w-[50vw] shadow-md rounded px-8 pt-6 pb-8 mb-4 mx-56"
         onSubmit={(e) => handleSubmit(e)}
@@ -101,37 +99,13 @@ export const Login = () => {
             Please choose a password.
           </p>
         </div>
-        <div className="mb-6">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="username"
-          >
-            Choose a username
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="username"
-            type="text"
-            placeholder="Username"
-            autoComplete="off"
-            onChange={(e) => setUserName(e.target.value)}
-            value={userName}
-          />
-        </div>
-
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-end">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Sign In
+            Register
           </button>
-          <p
-            className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800 cursor-pointer"
-            onClick={() => navigate('/register')}
-          >
-            Sign Up
-          </p>
         </div>
       </form>
       <p className="text-center text-gray-500 text-xs">
