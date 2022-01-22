@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { isAuthState, userInfoState } from '../../atoms';
+import { isAuthState } from '../../atoms';
 import { RequireAuthProps } from './types';
 
 export const RequireAuth: React.FC<RequireAuthProps> = () => {

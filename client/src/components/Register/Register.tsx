@@ -1,12 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
-} from 'firebase/auth';
-import { useSetRecoilState } from 'recoil';
-import { userAuthTokenState, userInfoState } from '../../atoms';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 import { RegisterProps } from './types';
 
@@ -17,12 +11,8 @@ export const Register: React.FC<RegisterProps> = () => {
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [userName, setUserName] = useState('');
 
   const navigate = useNavigate();
-
-  const setUserAuthToken = useSetRecoilState(userAuthTokenState);
-  const setUserInfo = useSetRecoilState(userInfoState);
 
   useEffect(() => {
     userRef.current?.focus();

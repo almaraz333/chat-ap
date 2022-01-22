@@ -18,7 +18,7 @@ export const Chat: React.FC<ChatProps> = () => {
   const params = useParams();
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const [userName, setUserName] = useState(userInfo?.name);
+  const [userName] = useState(userInfo?.name);
   const [roomUsers, setRoomUsers] = useState<User[]>([]);
 
   const messagesRef = useRef<null | HTMLDivElement>(null);
@@ -31,7 +31,7 @@ export const Chat: React.FC<ChatProps> = () => {
     socket.on('roomUsers', (users) => {
       setRoomUsers(users);
     });
-  }, [ENDPOINT]);
+  }, [userName, params.roomId]);
 
   useEffect(() => {
     socket?.on('message', (data) => setMessages((prev) => [...prev, data]));
