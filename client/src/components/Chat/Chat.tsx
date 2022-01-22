@@ -34,7 +34,15 @@ export const Chat: React.FC<ChatProps> = () => {
   }, [userName, params.roomId]);
 
   useEffect(() => {
-    socket?.on('message', (data) => setMessages((prev) => [...prev, data]));
+    socket?.on('message', (data) => {
+      setMessages((prev) => [...prev, data]);
+      if (messagesRef.current) {
+        messagesRef.current.scrollTo({
+          top: messagesRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    });
   }, []);
 
   const handleMessageSend = () => {
@@ -61,14 +69,14 @@ export const Chat: React.FC<ChatProps> = () => {
             ))}
           </ul>
         </div>
-        <div className="w-full h-full  flex flex-col ">
+        <div className="w-full h-full  flex flex-col">
           <h1 className="text-4xl font-bold ml-auto mr-auto my-5">
             Room {params.roomId}
           </h1>
 
           <div
             ref={messagesRef}
-            className="h-max-[100vh] h-[100vh] overflow-scroll pb-10 no-scrollbar"
+            className="h-max-[100vh] h-[100vh] overflow-scroll pb-20 no-scrollbar"
           >
             {messages &&
               messages.map((msg, i) => (
@@ -94,7 +102,7 @@ export const Chat: React.FC<ChatProps> = () => {
               required
             />
             <button
-              className="rounded-md bg-blue-500 text-white w-1/12 h-7"
+              className="rounded-md bg-blue-500 text-white w-max px-2 h-7"
               onClick={handleMessageSend}
             >
               Send
