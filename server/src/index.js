@@ -13,7 +13,11 @@ const {
   getRoomUsers
 } = require('./utils/users');
 
-const PORT = process.env.port || 4000;
+app.get('/', function (req, res) {
+  res.send('server up and running');
+});
+
+const PORT = process.env.PORT || 5000;
 
 const io = new Server(server, { cors: { origin: '*' } });
 
